@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+// service definition.
+service Data {
+  // Sends data
+  rpc SendData (SendDataRequest) returns (SendDataReply) {}
+}
+
+// The request message containing the data
+message SendDataRequest {
+  string data = 1;
+}
+
+// The response message
+message SendDataReply {
+  string message = 1;
+}
