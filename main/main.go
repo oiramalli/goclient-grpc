@@ -57,7 +57,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		Estado := p.Estado
 		mensaje := `{"Nombre":"` + Nombre + `", "Departamento":"` + Departamento + `", "Edad":` + strconv.Itoa(Edad) + `, "FormaContagio":"` + FormaContagio + `", "Estado":"` + Estado + `"}`
 
-		conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+		conn, err := grpc.DialContext(context.Background(), address, grpc.WithInsecure(), grpc.WithBlock(), grpc.WithTimeout(time.Duration(10)*time.Second))
 		if err != nil {
 			http.Error(w, `{"status":"FAILED","status_code":"0","message":"No se pudo conectar. `+err.Error()+`"}`, http.StatusBadRequest)
 			return
