@@ -59,7 +59,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 		conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 		if err != nil {
-			log.Fatalf("did not connect: %v", err)
+			http.Error(w, `{"status":"FAILED","status_code":"0","message":"No se pudo conectar. `+err+`"}`, http.StatusBadRequest)
+			return
 		}
 		defer conn.Close()
 		c := pb.NewDataClient(conn)
@@ -69,9 +70,9 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		defer cancel()
 		r, err := c.SendData(ctx, &pb.SendDataRequest{Data: mensaje})
 		if err != nil {
-			log.Fatalf("could not greet: %v", err)
+			http.Error(w, `{"status":"FAILED","status_code":"0","message":"No se enviar el mensaje. `+err+`"}`, http.StatusBadRequest)
 		}
-		log.Printf("Greeting: %s", r.GetMessage())
+		// log.Printf("Greeting: %s", r.GetMessage())
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status":"OK", "status_code":"1", "data": {"Enviando": ` + mensaje + `}}`))
 	default:
