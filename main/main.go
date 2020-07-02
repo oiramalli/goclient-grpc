@@ -55,7 +55,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		Edad := p.Edad
 		FormaContagio := p.FormaContagio
 		Estado := p.Estado
-		mensaje := `{"Nombre":"` + Nombre + `", "Departamento":"` + Departamento + `", "Edad":` + strconv.Itoa(Edad) + `, "FormaContagio":"` + FormaContagio + `", "Estado":"` + Estado + `"}`
+		mensaje := `{"Nombre":"` + Nombre + `", "Departamento":"` + Departamento + `", "Edad":` + strconv.Itoa(Edad) + `, "Forma de contagio":"` + FormaContagio + `", "Estado":"` + Estado + `"}`
 
 		conn, err := grpc.DialContext(context.Background(), address, grpc.WithInsecure(), grpc.WithBlock(), grpc.WithTimeout(time.Duration(10)*time.Second))
 		if err != nil {
@@ -71,6 +71,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		r, err := c.SendData(ctx, &pb.SendDataRequest{Data: mensaje})
 		if err != nil {
 			http.Error(w, `{"status":"FAILED","status_code":"0","message":"No se enviar el mensaje. `+err.Error()+`"}`, http.StatusBadRequest)
+			return
 		}
 		log.Printf("Greeting: %s", r.GetMessage())
 		w.Header().Set("Content-Type", "application/json")
