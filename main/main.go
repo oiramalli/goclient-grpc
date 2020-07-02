@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	pb "../proto"
+	pb "./proto"
 
 	"google.golang.org/grpc"
 )

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "github.com/oiramalli/goclient-grpc/proto;service";
+
 // service definition.
 service Data {
   // Sends data
